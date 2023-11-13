@@ -1,0 +1,57 @@
+.component-navbar .navbar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  position: relative;
+}
+.component-navbar .navbar .logo {
+  color: white;
+  margin-right: auto;
+}
+.component-navbar .navbar .menu-icon {
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  right: 15px;
+}
+.component-navbar .navbar .nav-links {
+  display: none;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #333;
+  color: #fff;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.component-navbar .navbar .nav-links li {
+  margin: 0;
+  padding: 10px 0;
+}
+.component-navbar .navbar .nav-links a {
+  color: #fff;
+  text-decoration: none;
+}
+.component-navbar .navbar .nav-links.active {
+  display: flex;
+}
+.component-navbar .navbar hr {
+  border: none;
+  border-top: 1px solid #fff;
+  margin: 10px 0;
+}
+.component-navbar .navbar p {
+  margin: 0;
+  color: #fff;
+  text-align: center;
+}
+.component-navbar .navbar p a {
+  color: #fff;
+  text-decoration: none;
+}/*# sourceMappingURL=NavBarStyle.css.map */
