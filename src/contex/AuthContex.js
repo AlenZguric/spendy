@@ -1,44 +1,28 @@
-// AuthContextProvider.js
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
   createUserWithEmailAndPassword,
-  signOut,
   signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
-} from "firebase/auth";
-import { auth } from "../firebase/firebase";
-import { updateUserProfileDocument } from "../firebase/updateUserProfileDocument";
-import { ProfileContextProvider } from "../contex/ProfileContext"; // Dodajte ovu liniju za import
+} from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const profileContext = useContext(ProfileContextProvider); // Dodajte ovu liniju za import
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
+   const signIn = (email, password) =>  {
+    return signInWithEmailAndPassword(auth, email, password)
+   }
 
   const logout = () => {
-    return signOut(auth);
-  };
-
-  const updateUserContext = async (uid, newData) => {
-    try {
-      const updatedUser = await updateUserProfileDocument(uid, newData);
-      setUser(updatedUser);
-      profileContext.updateUserProfile(updatedUser); // Ažurirajte i korisnički profil u ProfileContextu
-    } catch (error) {
-      console.error("Error updating user context:", error);
-    }
-  };
-
-
+      return signOut(auth)
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -51,9 +35,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{ createUser, user, logout, signIn, updateUserContext  }}
-    >
+    <UserContext.Provider value={{ createUser, user, logout, signIn }}>
       {children}
     </UserContext.Provider>
   );

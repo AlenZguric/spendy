@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaBars, FaTimes  } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import "../../assets/styles/components/NavBar/NavBarStyle.css";
 import { UserAuth } from "../../contex/AuthContex";
+
 import { getUserProfileDocument } from "../../firebase/getUserProfileDocument";
 import avatarProfile from "../../assets/images/avatarProfile.png";
 
@@ -10,6 +11,14 @@ const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = UserAuth();
   const [profileImage, setProfileImage] = useState(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [registrationTime, setRegistrationTime] = useState("");
+
   const navigate = useNavigate();
 
   const avatarURL = avatarProfile;
@@ -23,24 +32,44 @@ const NavBar = () => {
     setMenuOpen(false);
   };
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
+  const fetchData = async () => {
+    if (user && user.uid) {
       try {
-        // Provjeri ima li trenutnog korisnika prije dohvaćanja podataka profila
-        if (user && user.uid) {
-          const userProfile = await getUserProfileDocument(user.uid);
-          const profileImage = userProfile?.profileImage || avatarURL;
-          setProfileImage(profileImage);
+        const userProfile = await getUserProfileDocument(user.uid);
+
+        if (userProfile && userProfile.profile && userProfile.profile.key) {
+          const {
+            FirstName = "",
+            LastName = "",
+            email: userEmail = "",
+            Gender = "",
+            City = "",
+            Country = "",
+            ProfileImage,
+          } = userProfile.profile.key;
+
+          setFirstName(FirstName);
+          setLastName(LastName);
+          setEmail(userEmail);
+          setGender(Gender);
+          setCity(City);
+          setCountry(Country);
+          setProfileImage(ProfileImage || null);
+
+          // Postavite i ostale vrijednosti, npr. registrationTime
+          setRegistrationTime(userProfile.theRest?.registrationTime || "");
+        } else {
+          console.error("Profile data is missing or incomplete.");
         }
       } catch (error) {
-        console.error("Greška pri dohvaćanju podataka profila:", error);
+        console.error("Error fetching user profile:", error);
       }
-    };
-  
-    fetchProfileImage();
-  }, [user,profileImage, avatarURL]);
-  
-  
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [user]);
 
   return (
     <div className="component-navbar">
@@ -58,18 +87,7 @@ const NavBar = () => {
             <NavLink to="/">Home</NavLink>
           </li>
 
-          {!user && (
-            <>
-              <li>
-                <NavLink to="/signin">Sign In</NavLink>
-              </li>
-              <li>
-                <NavLink to="/signup">Sign Up</NavLink>
-              </li>
-            </>
-          )}
-
-          {user && (
+          {user ? (
             <>
               <li>
                 <NavLink to="/dashboard">Dashboard</NavLink>
@@ -78,6 +96,15 @@ const NavBar = () => {
                 <NavLink to="/profile">Profile</NavLink>
               </li>
               <li onClick={logout}>Logout</li>
+            </>
+          ) : (
+            <>
+              <li>
+                <NavLink to="/signin">Sign In</NavLink>
+              </li>
+              <li>
+                <NavLink to="/signup">Sign Up</NavLink>
+              </li>
             </>
           )}
           <li>
@@ -88,15 +115,15 @@ const NavBar = () => {
           </li>
           {user && (
             <div className="profile-info" onClick={handleProfile}>
-              <div className="profile-picture">
+              <div className="profile-picture" >
                 {profileImage ? (
                   <img src={profileImage} alt="Profile" />
                 ) : (
                   <img src={avatarURL} alt="Avatar" />
                 )}
               </div>
-              <div  className="name-profile">
-                <p>{user.email}</p>
+              <div className="name-profile">
+                <p>hi there, {firstName || user.email}</p>
               </div>
             </div>
           )}

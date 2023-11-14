@@ -7,10 +7,7 @@ export const ProfileContextProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState({});
 
   const updateUserProfile = (newProfileData) => {
-    // Dodajte logiku za ažuriranje profila u Firestoreu
-    // ...
 
-    // Ažurirajte lokalno stanje profila
     setUserProfile((prevProfile) => ({
       ...prevProfile,
       ...newProfileData,
