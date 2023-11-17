@@ -1,0 +1,69 @@
+@import "../../colors/colors.scss";
+
+// .profile-info-section{
+//    display: flex;
+//    flex-direction: column;
+//    align-items: center;
+//    margin-top: 20px;
+//    .profilepicture {
+//     position: relative;
+  
+//     img {
+//       border-radius: 50%;
+//       display: block;
+//       width: 100px;
+//       height: 100px;
+//     }
+  
+//     .material-symbols-outlined {
+//       position: absolute;
+//       bottom: 0;
+//       transform: translate(100px);
+//       background-color: $color-spinner;
+//       color: white;
+//       padding: 4px;
+//       border-radius: 50%;
+//       cursor: pointer;
+//     }
+//   }
+  .name-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    max-width: 100%;
+    margin-bottom: 15px;
+    .coolinput {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        position: static;
+        max-width: 40%;
+      
+        label.text {
+          font-size: 0.75rem;
+          color: $color-spinner;
+          font-weight: 700;
+          position: relative;
+          top: 0.5rem;
+          margin: 0 0 0 7px;
+          padding: 0 3px;
+          background: white;
+          width: fit-content;
+        }
+      
+        input[type="text"].input {
+          padding: 9px 10px;
+          font-size: 1rem;
+          border: 2px $color-spinner solid;
+          border-radius: 5px;
+          background: white;
+      
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+      
+      
+  }
+//}

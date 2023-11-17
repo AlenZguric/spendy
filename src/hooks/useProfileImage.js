@@ -1,42 +1,38 @@
-import { useState, useEffect } from 'react';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import avatarProfile from "../assets/images/avatarProfile.png"
 
-const useProfileImage = (user) => {
-  const [profileImage, setProfileImage] = useState('');
+import { useEffect, useState } from "react";
+import { UserAuth } from "../context/AuthContext";
+import { getUserProfileDocument } from "../firebase/getUserProfileDocument";
+
+export function useProfileImage() {
+  const { user } = UserAuth();
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
-      if (user) {
-        const firestore = getFirestore();
-        const userRef = doc(firestore, 'users', user.uid);
-
-        try {
-          const snapshot = await getDoc(userRef);
-          if (snapshot.exists()) {
-            const userData = snapshot.data();
-            if (
-              userData &&
-              userData.profile &&
-              userData.profile.key &&
-              userData.profile.key.ProfileImage
-            ) {
-              setProfileImage(userData.profile.key.ProfileImage);
+      try {
+        if (user && user.uid) {
+          const userProfile = await getUserProfileDocument(user.uid);
+    
+          if (userProfile && userProfile.profile && userProfile.profile.key) {
+            const { ProfileImage } = userProfile.profile.key;
+    
+            if (ProfileImage !== "") {
+              setProfileImage(ProfileImage);
             } else {
-              // Postavite defaultnu sliku ako ne postoji profilna slika
-              setProfileImage(avatarProfile);
+              // Ako je ProfileImage prazan string, postavi profileImage na null
+              setProfileImage(null);
             }
           }
-        } catch (error) {
-          console.error('Error fetching profile image:', error);
         }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
       }
     };
+    
+    
 
     fetchProfileImage();
   }, [user]);
 
   return profileImage;
-};
-
-export default useProfileImage;
+}

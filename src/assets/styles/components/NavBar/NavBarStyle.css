@@ -1,17 +1,22 @@
+.component-navbar {
+  border: none;
+  border-bottom: 4px solid #5e35b1;
+}
 .component-navbar .navbar {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #333;
+  background-color: #ffffff;
   position: relative;
 }
 .component-navbar .navbar .logo {
-  color: white;
+  color: #5e35b1;
   margin-right: auto;
+  font-size: 1.1rem;
 }
 .component-navbar .navbar .menu-icon {
-  font-size: 24px;
-  color: #fff;
+  font-size: 1.5rem;
+  color: #4b5563;
   cursor: pointer;
   position: absolute;
   right: 15px;
@@ -22,29 +27,65 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  background-color: #333;
-  color: #fff;
+  background-color: #ffffff;
+  color: #4b5563;
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   text-align: center;
+  z-index: 1;
+  width: 100vw;
 }
 .component-navbar .navbar .nav-links li {
   margin: 0;
   padding: 10px 0;
 }
+.component-navbar .navbar .nav-links li:hover {
+  background-color: #e5e7eb;
+}
 .component-navbar .navbar .nav-links a {
-  color: #fff;
+  color: #4b5563;
   text-decoration: none;
 }
 .component-navbar .navbar .nav-links.active {
   display: flex;
 }
-.component-navbar .navbar hr {
+.component-navbar .navbar .nav-links .profile-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  max-height: 100px;
+  padding: 10px;
   border: none;
-  border-top: 1px solid #fff;
+  border-top: 2px solid #5e35b1;
+  border-bottom: 2px solid #5e35b1;
   margin: 10px 0;
+}
+.component-navbar .navbar .nav-links .profile-info .profile-picture {
+  width: 65px;
+  height: 65px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid #5e35b1;
+  margin-right: 10px;
+}
+.component-navbar .navbar .nav-links .profile-info .profile-picture img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.component-navbar .navbar .nav-links .profile-info .name-profile p {
+  color: #4b5563;
+  padding: 10px;
+}
+.component-navbar .navbar .nav-links .profile-info .name-profile p:nth-child(2) {
+  letter-spacing: 2px;
+  text-transform: capitalize;
+  font-weight: bold;
+  transform: translate(20px);
 }
 .component-navbar .navbar p {
   margin: 0;

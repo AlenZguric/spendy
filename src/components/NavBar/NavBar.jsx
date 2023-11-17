@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "../../assets/styles/components/NavBar/NavBarStyle.css";
-import { UserAuth } from "../../contex/AuthContex";
-
+import { UserAuth } from "../../context/AuthContext";
 import { getUserProfileDocument } from "../../firebase/getUserProfileDocument";
-import avatarProfile from "../../assets/images/avatarProfile.png";
+import defaultAvatar from "../../assets/images/defaultAvatar.png";
+import {useOutsideClick} from "../../hooks/useOutsideClick";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +21,11 @@ const NavBar = () => {
 
   const navigate = useNavigate();
 
-  const avatarURL = avatarProfile;
+  const avatarURL = defaultAvatar;
+
+  const menuRef = useOutsideClick(() => {
+    setMenuOpen(false);
+  });
 
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
@@ -32,12 +36,16 @@ const NavBar = () => {
     setMenuOpen(false);
   };
 
+ 
+  
+
+  useEffect(() => {
   const fetchData = async () => {
     if (user && user.uid) {
       try {
         const userProfile = await getUserProfileDocument(user.uid);
 
-        if (userProfile && userProfile.profile && userProfile.profile.key) {
+        if (userProfile && userProfile.profile && userProfile.profile) {
           const {
             FirstName = "",
             LastName = "",
@@ -46,7 +54,7 @@ const NavBar = () => {
             City = "",
             Country = "",
             ProfileImage,
-          } = userProfile.profile.key;
+          } = userProfile.profile;
 
           setFirstName(FirstName);
           setLastName(LastName);
@@ -55,6 +63,8 @@ const NavBar = () => {
           setCity(City);
           setCountry(Country);
           setProfileImage(ProfileImage || null);
+
+          console.log(lastName, email, gender, city, country, registrationTime);
 
           // Postavite i ostale vrijednosti, npr. registrationTime
           setRegistrationTime(userProfile.theRest?.registrationTime || "");
@@ -66,14 +76,13 @@ const NavBar = () => {
       }
     }
   };
+  fetchData();
 
-  useEffect(() => {
-    fetchData();
-  }, [user]);
+  }, [user ]);
 
   return (
-    <div className="component-navbar">
-      <div className="navbar">
+    <div className="component-navbar" >
+      <div className="navbar" ref={menuRef}>
         <div className="logo">
           <h1>Spendy</h1>
         </div>
@@ -82,7 +91,7 @@ const NavBar = () => {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
 
-        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
+        <ul className={`nav-links ${menuOpen ? "active" : ""}`}  >
           <li>
             <NavLink to="/">Home</NavLink>
           </li>
@@ -95,7 +104,9 @@ const NavBar = () => {
               <li>
                 <NavLink to="/profile">Profile</NavLink>
               </li>
-              <li onClick={logout}>Logout</li>
+              <li onClick={logout}>
+                <NavLink to="/">Logout</NavLink>
+              </li>
             </>
           ) : (
             <>
@@ -113,24 +124,25 @@ const NavBar = () => {
           <li>
             <NavLink to="/contact">Contact</NavLink>
           </li>
+          <li>
+            <NavLink to="/privacyandterms">Privacy & Terms</NavLink>
+          </li>
           {user && (
             <div className="profile-info" onClick={handleProfile}>
               <div className="profile-picture" >
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" />
+                  <img src={profileImage} alt="Profile" style={{maxHeight: "100px", maxWidth: "100px"}} />
                 ) : (
-                  <img src={avatarURL} alt="Avatar" />
+                  <img src={avatarURL} alt="Avatar" style={{maxHeight: "100px", maxWidth: "100px"}} />
                 )}
               </div>
               <div className="name-profile">
-                <p>hi there, {firstName || user.email}</p>
+                <p>welcome, </p>
+                <p>{firstName || user.email}</p>
               </div>
             </div>
           )}
-          <hr />
-          <p>
-            <NavLink to="/privacyandterms">Privacy & Terms</NavLink>
-          </p>
+          
         </ul>
       </div>
     </div>
