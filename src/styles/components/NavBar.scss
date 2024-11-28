@@ -1,0 +1,105 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: white;
+  
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  
+    .nav-bar {
+      nav {
+        display: flex;
+        align-items: center;
+  
+        .menu-icon {
+          display: block;
+          font-size: 2rem;
+          margin-right: 1rem;
+          cursor: pointer;
+        }
+  
+        ul {
+          list-style: none;
+          display: none;
+          flex-direction: column;
+          padding: 0;
+  
+          li {
+            margin: 0.5rem 0;
+  
+            a {
+              color: white;
+              text-decoration: none;
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+  
+            .dropdown {
+              display: none;
+              flex-direction: column;
+              position: absolute;
+              background-color: #444;
+              padding: 0.5rem;
+              border-radius: 0.25rem;
+  
+              li {
+                margin: 0.5rem 0;
+              }
+            }
+  
+            &:hover .dropdown {
+              display: flex;
+            }
+          }
+        }
+  
+        .auth-link {
+          margin-left: 1rem;
+          color: white;
+          text-decoration: none;
+          padding: 0.5rem 1rem;
+          border: 1px solid white;
+          border-radius: 0.25rem;
+  
+          &:hover {
+            background-color: white;
+            color: #333;
+          }
+        }
+      }
+    }
+  
+    // Media Queries for larger screens
+    @media (min-width: 768px) {
+      .nav-bar {
+        nav {
+          .menu-icon {
+            display: none;
+          }
+  
+          ul {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+  
+            li {
+              position: relative;
+  
+              .dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

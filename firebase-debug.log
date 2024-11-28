@@ -1,0 +1,21 @@
+[debug] [2024-11-12T23:31:29.645Z] ----------------------------------------------------------------------
+[debug] [2024-11-12T23:31:29.647Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\zguri\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2024-11-12T23:31:29.647Z] CLI Version:   13.25.0
+[debug] [2024-11-12T23:31:29.648Z] Platform:      win32
+[debug] [2024-11-12T23:31:29.648Z] Node Version:  v18.18.0
+[debug] [2024-11-12T23:31:29.649Z] Time:          Wed Nov 13 2024 00:31:29 GMT+0100 (srednjoeuropsko standardno vrijeme)
+[debug] [2024-11-12T23:31:29.649Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-12T23:31:29.656Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-12T23:31:29.656Z] > authorizing via signed-in user (zguric.corp@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  E:\PROJEKTI\Spendy\spendy
+
