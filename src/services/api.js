@@ -1,154 +1,123 @@
-import { db, auth } from "../firebase"; // Provjeri da li je db i auth ispravno importiran
-import { doc, getDoc,  addDoc, setDoc, updateDoc,  collection,  } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs, deleteDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { auth, db } from "../firebase"; // Prilagodi put prema svom firebase.js
 
 
-//Kreiranje prilikom SIGN UP
+// Funkcija koja dodaje nickname u podkolekciju 'nicknames' za korisnika
+export const addUserNickname = async (nickname) => {
+  const user = auth.currentUser;
 
-export const createUserDatabase = async (userId) => {
-  try {
-    // Kreiramo glavni dokument za korisnika unutar "reg" kolekcije
-    const userRef = doc(db, "reg", userId);
+  if (user) {
+    try {
+      // Referenca na korisnikov dokument i podkolekciju 'nicknames'
+      const nicknameRef = doc(collection(db, `users/${user.uid}/nicknames`), nickname);
 
-    // Postavljanje inicijalnog nick_name-a
-    await setDoc(userRef, { nick_name: "Alen" });
+      const initialData = {
+        savings: [],
+        expenses: [],
+        categories: ["auto", "hrana", "kafić", "teretana", "računi"],
+        createdAt: new Date().toISOString(),
+      };
 
-    console.log(`Korisnik "Alen" kreiran.`);
+      // Provjeri postoji li već nickname u podkolekciji
+      const nicknameDocSnap = await getDoc(nicknameRef);
 
-    // Kreiramo prazne subkolekcije unutar nick_name-a
-    const troskoviRef = collection(userRef, "nick_name/troskovi");
-    const stednjaRef = collection(userRef, "nick_name/stednja");
-    const kategorijeRef = collection(userRef, "nick_name/kategorije");
-
-    console.log("Struktura korisnika kreirana s praznim subkolekcijama (troskovi, stednja, kategorije).");
-  } catch (error) {
-    console.error("Greška pri kreiranju korisničke baze podataka:", error);
-  }
-};//addExpense
-
-// Funkcija za dodavanje podataka u subkolekcije
-export const addDataToSubcollection = async (userId, subcollectionName, data) => {
-  try {
-    const subcollectionRef = collection(db, "reg", userId, "nick_name", subcollectionName);
-    await addDoc(subcollectionRef, data);
-    console.log(`Podaci dodani u subkolekciju "${subcollectionName}":`, data);
-  } catch (error) {
-    console.error(`Greška pri dodavanju podataka u ${subcollectionName}:`, error);
-  }
-};
-
-export const addExpense = async (userId, expenseData) => {
-  try {
-    const troskoviRef = collection(db, "reg", userId, "troskovi");
-    await addDoc(troskoviRef, expenseData);
-    console.log("Trošak dodan:", expenseData);
-  } catch (error) {
-    console.error("Greška pri dodavanju troška:", error);
-  }
-};
-
-export const addSavings = async (userId, savingsData) => {
-  try {
-    const stednjaRef = collection(db, "reg", userId, "stednja");
-    await addDoc(stednjaRef, savingsData);
-    console.log("Štednja dodana:", savingsData);
-  } catch (error) {
-    console.error("Greška pri dodavanju štednje:", error);
-  }
-};
-
-export const addCategory = async (userId, categoryData) => {
-  try {
-    const kategorijeRef = collection(db, "reg", userId, "kategorije");
-    await addDoc(kategorijeRef, categoryData);
-    console.log("Kategorija dodana:", categoryData);
-  } catch (error) {
-    console.error("Greška pri dodavanju kategorije:", error);
-  }
-};
-
-
-export const fetchExpenses = async () => {
-  const userRef = doc(db, "reg", auth.currentUser.uid); // Dohvati referencu na korisničke podatke
-  try {
-    const userDoc = await getDoc(userRef, "troskovi"); // Dohvati korisnički dokument iz Firestore
-    if (userDoc.exists()) {
-      return userDoc.data().troskovi || []; // Vraća troškove ako postoje, inače prazan array
-    } else {
-      console.log("Dokument ne postoji!");
-      return [];
+      if (!nicknameDocSnap.exists()) {
+        // Ako nickname ne postoji, dodaj ga
+        await setDoc(nicknameRef, initialData);
+        console.log(`Struktura za nickname "${nickname}" uspješno dodana!`);
+      } else {
+        console.log(`Nickname "${nickname}" već postoji!`);
+      }
+    } catch (error) {
+      console.error("Greška pri dodavanju nickname-a:", error.message);
+      throw error;
     }
-  } catch (error) {
-    console.error("Greška pri dohvaćanju troškova:", error);
-    throw error;
+  } else {
+    throw new Error("User is not authenticated");
   }
 };
 
+// Funkcija za dohvat svih nickname-ova za korisnika
+export const getUserNicknames = async () => {
+  const user = auth.currentUser;
 
-
-export const fetchCategories = async (userId) => {
-  try {
-    const userDocRef = doc(db, "reg", userId);
-    const docSnapshot = await getDoc(userDocRef, "kategorije");
-
-    if (docSnapshot.exists()) {
-      const data = docSnapshot.data();
-      console.log("Dohvaćeni podaci za korisnika:", data); // Ispis cijelog objekta
-      const categories = data?.nick_name?.kategorije || []; // Provjeri točan put
-     console.log("Dohvaćene kategorije:", categories);
-      return categories;
-    } else {
-      console.log("Dokument ne postoji.");
-      return []; // Ako dokument ne postoji, vraća prazan niz
+  if (user) {
+    try {
+      const nicknamesRef = collection(db, `users/${user.uid}/nicknames`);
+      const nicknamesSnap = await getDocs(nicknamesRef);
+      const nicknames = [];
+      nicknamesSnap.forEach((doc) => {
+        nicknames.push(doc.id); // Dodaj nickname (ID dokumenta) u polje
+      });
+      return nicknames;
+    } catch (error) {
+      console.error("Greška pri dohvaćanju nickname-ova:", error.message);
+      throw error;
     }
-  } catch (error) {
-    console.error("Greška pri dohvaćanju kategorija:", error);
-    return []; // Vraća prazan niz u slučaju greške
+  } else {
+    throw new Error("User is not authenticated");
   }
 };
 
-// Funkcija za dodavanje nove kategorije
-export const addNewCategory = async (userId, category) => {
-  const categoryRef = doc(db, "reg", userId);
-  const userSnap = await getDoc(categoryRef);
-  if (userSnap.exists()) {
-    const categories = userSnap.data().nick_name.kategorije || [];
-    categories.push(category); // Dodajemo novu kategoriju
-    await updateDoc(categoryRef, {
-      "nick_name.kategorije": categories,
-    });
+
+// Funkcija koja preimenuje nickname
+export const renameNickname = async (oldNickname, newNickname) => {
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      // Referenca na stari i novi nickname dokument
+      const oldNicknameRef = doc(db, `users/${user.uid}/nicknames`, oldNickname);
+      const newNicknameRef = doc(db, `users/${user.uid}/nicknames`, newNickname);
+
+      // Provjeri postoji li već novi nickname
+      const newNicknameDocSnap = await getDoc(newNicknameRef);
+      if (newNicknameDocSnap.exists()) {
+        console.log(`Nickname "${newNickname}" već postoji!`);
+        return;
+      }
+
+      // Prekopiraj podatke sa starog nickname-a na novi
+      const oldNicknameDocSnap = await getDoc(oldNicknameRef);
+      if (oldNicknameDocSnap.exists()) {
+        const oldData = oldNicknameDocSnap.data();
+
+        // Dodaj novi nickname s postojećim podacima
+        await setDoc(newNicknameRef, oldData);
+        console.log(`Nickname "${oldNickname}" preimenovan u "${newNickname}"`);
+
+        // Obriši stari nickname
+        await deleteDoc(oldNicknameRef);
+        console.log(`Stari nickname "${oldNickname}" obrisan.`);
+      } else {
+        console.log(`Stari nickname "${oldNickname}" ne postoji!`);
+      }
+    } catch (error) {
+      console.error("Greška pri preimenovanju nickname-a:", error.message);
+      throw error;
+    }
   } else {
-    throw new Error("Korisnik nije pronađen");
+    throw new Error("User is not authenticated");
   }
 };
 
-// Funkcija za ažuriranje kategorije
-export const updateCategory = async (userId, oldCategory, newCategory) => {
-  const categoryRef = doc(db, "reg", userId);
-  const userSnap = await getDoc(categoryRef);
-  if (userSnap.exists()) {
-    const categories = userSnap.data().nick_name.kategorije || [];
-    const updatedCategories = categories.map((category) =>
-      category === oldCategory ? newCategory : category
-    );
-    await updateDoc(categoryRef, {
-      "nick_name.kategorije": updatedCategories,
-    });
-  } else {
-    throw new Error("Korisnik nije pronađen");
-  }
-};
+// Funkcija koja briše nickname
+export const deleteNickname = async (nickname) => {
+  const user = auth.currentUser;
 
-// Funkcija za brisanje kategorije
-export const deleteCategory = async (userId, category) => {
-  const categoryRef = doc(db, "reg", userId);
-  const userSnap = await getDoc(categoryRef);
-  if (userSnap.exists()) {
-    const categories = userSnap.data().nick_name.kategorije || [];
-    const updatedCategories = categories.filter((cat) => cat !== category);
-    await updateDoc(categoryRef, {
-      "nick_name.kategorije": updatedCategories,
-    });
+  if (user) {
+    try {
+      // Referenca na dokument nickname-a
+      const nicknameRef = doc(db, `users/${user.uid}/nicknames`, nickname);
+
+      // Obriši nickname
+      await deleteDoc(nicknameRef);
+      console.log(`Nickname "${nickname}" uspješno obrisan!`);
+    } catch (error) {
+      console.error("Greška pri brisanju nickname-a:", error.message);
+      throw error;
+    }
   } else {
-    throw new Error("Korisnik nije pronađen");
+    throw new Error("User is not authenticated");
   }
 };
