@@ -2,9 +2,11 @@ import { doc, setDoc, getDoc, collection, getDocs, deleteDoc, updateDoc, arrayUn
 import { auth, db } from "../firebase"; // Prilagodi put prema svom firebase.js
 
 
+
 // Funkcija koja dodaje nickname u podkolekciju 'nicknames' za korisnika
 export const addUserNickname = async (nickname) => {
   const user = auth.currentUser;
+
 
   if (user) {
     try {
@@ -119,5 +121,20 @@ export const deleteNickname = async (nickname) => {
     }
   } else {
     throw new Error("User is not authenticated");
+  }
+};
+
+// Promjena boje za pozadinu
+
+export const updateNicknameColor = async (nickname, newColor) => {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const nicknameRef = doc(db, `users/${user.uid}/nicknames/${nickname}`);
+      await updateDoc(nicknameRef, { color: newColor });
+      console.log("Boja uspješno ažurirana!");
+    } catch (error) {
+      console.error("Greška pri ažuriranju boje:", error.message);
+    }
   }
 };

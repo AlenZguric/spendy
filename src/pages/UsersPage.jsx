@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getUserNicknames, renameNickname } from '../services/api';
+import { useNavigate } from "react-router-dom";
+import { getUserNicknames, renameNickname, deleteNickname } from '../services/NickNameFunc';
 import UserAuth from '../components/auth/UserAuth';
 import { IconButton, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const DisplayNicknames = () => {
   const [nicknames, setNicknames] = useState([]);
@@ -12,6 +14,8 @@ const DisplayNicknames = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedNickname, setSelectedNickname] = useState('');
   const [newNickname, setNewNickname] = useState('');
+
+  const navigate = useNavigate();
 
   // Funkcija za dohvaćanje nickname-ova
   const fetchNicknames = async () => {
@@ -51,8 +55,24 @@ const DisplayNicknames = () => {
         prevNicknames.map((nick) => (nick === selectedNickname ? newNickname : nick))
       );
       handleCloseDialog();
+
+        // Preusmjeravanje na /dashboard nakon uspješnog uređivanja
+        navigate("/dashboard");
     } catch (error) {
       console.error('Greška pri preimenovanju nickname-a:', error.message);
+    }
+  };
+
+  if (loading) {
+    return <div>Učitavanje...</div>;
+  }
+   // Obrada brisanja
+   const handleDelete = async (nickname) => {
+    try {
+      await deleteNickname( nickname);
+      setNicknames((prevNicknames) => prevNicknames.filter((nick) => nick !== nickname));
+    } catch (error) {
+      console.error("Greška pri brisanju nickname-a:", error.message);
     }
   };
 
@@ -65,10 +85,13 @@ const DisplayNicknames = () => {
       <h2>Vaši nickname-ovi</h2>
       <ul>
         {nicknames.map((nickname, index) => (
-          <li key={index}>
+          <li key={index} style={{ backgroundColor: "white", padding: "10px" }}>
             {nickname}
             <IconButton onClick={() => handleOpenDialog(nickname)} aria-label="Preimenuj">
               <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => handleDelete(nickname)} aria-label="Obriši" color="error">
+              <DeleteIcon />
             </IconButton>
           </li>
         ))}
