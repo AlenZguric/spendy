@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Parkinsans:wght@300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+.sign-out-btn {
+  padding: 0.75rem;
+  background-color: #977be5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 50%;
+}
+.sign-out-btn:hover {
+  background-color: rgb(124, 80, 215);
+  transform: scale(1.05);
+}/*# sourceMappingURL=SignOutButton.css.map */
