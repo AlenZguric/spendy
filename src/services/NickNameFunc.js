@@ -1,4 +1,4 @@
-import { doc, setDoc, getDoc, collection, getDocs, deleteDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs, deleteDoc, updateDoc,  } from "firebase/firestore";
 import { auth, db } from "../firebase"; // Prilagodi put prema svom firebase.js
 
 
