@@ -38,6 +38,8 @@ function App() {
   if (isFetching) {
     return <p>Loading...</p>;
   }
+  //console.log("Korisnik u App.js:", user);
+
 
   return (
     <div className="App">
@@ -53,7 +55,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp user={user} />} />
 
 
-          <Route path="/dashboard" element={<ProtectedRoute user={user}> <DashBoard /></ProtectedRoute>}/>
+          <Route path="/dashboard" element={<ProtectedRoute user={user}> <DashBoard userId={user?.uid} /></ProtectedRoute>}/>
           <Route path="/add-expense" element={<ProtectedRoute user={user}><AddExpensePage /></ProtectedRoute>} />
           <Route path="/expense-list" element={<ProtectedRoute user={user}><ExpenseListPage /></ProtectedRoute>}  />
           <Route path="/category-expenses" element={<ProtectedRoute user={user}><CategoryExpensesPage /></ProtectedRoute>} />

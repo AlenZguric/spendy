@@ -6,7 +6,7 @@ import { auth, db } from "../firebase"; // Prilagodi put prema svom firebase.js
 // Funkcija koja dodaje nickname u podkolekciju 'nicknames' za korisnika
 export const addUserNickname = async (nickname) => {
   const user = auth.currentUser;
-
+  console.log("Current User ID:", user ? user.uid : "No user");
 
   if (user) {
     try {

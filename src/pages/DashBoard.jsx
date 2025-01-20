@@ -18,7 +18,9 @@ const DashBoard = ({ userId }) => {
   };
 
   const handleAddNickname = async () => {
-    console.log("Dodavanje nadimka pokrenuto"); // Dodano za debugiranje
+    console.log("Dodavanje nadimka pokrenuto");
+    console.log("UserID unutar funkcije:", userId); // Provjera vrijednosti
+  
     if (!nickname.trim()) {
       setSnackbarMessage("Nickname ne može biti prazan.");
       setSnackbarSeverity("error");
@@ -27,11 +29,11 @@ const DashBoard = ({ userId }) => {
     }
   
     try {
-      console.log("Provjera nadimka:", nickname); // Dodano za debugiranje
-      const nicknameRef = doc(collection(db, `users/${userId}/nicknames`), nickname);
+      console.log("Provjera nadimka:", nickname);
   
-      // Provjera postojanja nadimka
+      const nicknameRef = doc(collection(db, `users/${userId}/nicknames`), nickname);
       const nicknameDoc = await getDoc(nicknameRef);
+  
       if (nicknameDoc.exists()) {
         setSnackbarMessage("Nickname već postoji.");
         setSnackbarSeverity("error");
@@ -52,15 +54,16 @@ const DashBoard = ({ userId }) => {
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
   
-      console.log("Nickname uspješno dodan!"); // Dodano za debugiranje
-      handleCloseModal(); // Zatvori modal nakon uspješnog dodavanja
+      console.log("Nickname uspješno dodan!");
+      handleCloseModal();
     } catch (error) {
-      console.error("Greška pri dodavanju nickname-a:", error); // Dodano za debugiranje
+      console.error("Greška pri dodavanju nickname-a:", error.code, error.message);
       setSnackbarMessage(`Greška pri dodavanju nickname-a: ${error.message}`);
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
     }
   };
+  
   
 
   return (
