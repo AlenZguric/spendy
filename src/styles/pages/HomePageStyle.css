@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Parkinsans:wght@300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+.homepage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  padding: 2rem;
+  background: rgb(246, 245, 253);
+}
+.homepage__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.homepage__header h1 {
+  font-size: 2.5rem;
+  color: #6d3ec3;
+}
+.homepage__header p {
+  font-size: 1.2rem;
+  color: #ab99ec;
+  margin-top: 0.5rem;
+}
+.homepage__auth {
+  width: 100%;
+  max-width: 400px;
+  background: #eeecfb;
+  border: 1px solid #c7bef4;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.homepage__auth .homepage__toggle {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #977be5;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.homepage__auth .homepage__toggle:hover {
+  color: #6d3ec3;
+}/*# sourceMappingURL=HomePageStyle.css.map */

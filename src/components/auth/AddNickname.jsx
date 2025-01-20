@@ -54,7 +54,7 @@ const AddNickname = ({ userId,  }) => {
           onChange={(e) => setNickname(e.target.value)}
           required
         />
-        <Button variant="contained" color="primary" type="submit">
+        <Button variant="contained" color="#977be5" type="submit">
           Dodaj Nickname
         </Button>
       </Box>

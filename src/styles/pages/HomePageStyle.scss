@@ -1,0 +1,49 @@
+@import '../../utils/scss/main.scss';
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  padding: 2rem;
+  background: $color50;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+      color: $color700;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: $color400;
+      margin-top: 0.5rem;
+    }
+  }
+
+  &__auth {
+    width: 100%;
+    max-width: 400px;
+    background: $color100;
+    border: 1px solid $color300;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .homepage__toggle {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      color: $color500;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $color700;
+      }
+    }
+  }
+}

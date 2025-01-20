@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SignUp from "../components/auth/SignUp";
 import SignIn from "../components/auth/SignIn";
 import { Navigate } from "react-router-dom";
+import "../styles/pages/HomePageStyle.css"; 
 
 const HomePage = ({ user }) => {
   const [isSignUpActive, setIsSignUpActive] = useState(true);
@@ -11,14 +12,22 @@ const HomePage = ({ user }) => {
   if (user) return <Navigate to="/dashboard" />;
 
   return (
-    <section>
-      <h2>HomePage</h2>
-      {isSignUpActive ? <SignUp /> : <SignIn />}
-      <p onClick={handleMethodChange}>
-        {isSignUpActive ? "Already have an account? Login" : "Create an account"}
-     </p>
-      
-  
+    <section className="homepage">
+      <div className="homepage__header">
+        <h1>Welcome to Spendy!</h1>
+        <p>
+          Your personal finance manager. Track your expenses, grow your savings,
+          and gain control over your budget — all for free!
+        </p>
+      </div>
+      <div className="homepage__auth">
+        {isSignUpActive ? <SignUp /> : <SignIn />}
+        <p onClick={handleMethodChange} className="homepage__toggle">
+          {isSignUpActive
+            ? "Already have an account? Log in here."
+            : "New to Spendy? Create an account now."}
+        </p>
+      </div>
     </section>
   );
 };
